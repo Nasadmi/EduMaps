@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import { ConfigModule } from '@nestjs/config';
         username: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'markmaps-app',
-        entities: [],
+        entities: [User],
         synchronize: process.env.NODE_ENV === 'dev',
       }),
     }),
+    UserModule,
   ],
 })
 export class AppModule {}
