@@ -1,3 +1,5 @@
+-- This script is for those who want to know how to make the same TypeORM database but in an SQL script.
+
 CREATE DATABASE IF NOT EXISTS `markmaps-app`;
 
 USE `markmaps-app`;
@@ -18,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `markmaps`
     script text not null,
     user_id char(36) not null,
     public decimal(1,0) not null,
+    stars int,
     foreign key (user_id) references users(id),
     check (public >= 0 AND public <= 1)
 );
