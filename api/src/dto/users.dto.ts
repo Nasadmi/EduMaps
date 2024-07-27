@@ -4,7 +4,6 @@ import {
   IsEmail,
   IsStrongPassword,
   MaxLength,
-  IsBase64,
 } from 'class-validator';
 
 export class UserDTO {
@@ -30,7 +29,6 @@ export class UserDTO {
   })
   password: string;
 
-  @IsBase64()
   img: string | undefined;
 }
 
