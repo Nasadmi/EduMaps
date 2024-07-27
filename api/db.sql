@@ -18,10 +18,12 @@ CREATE TABLE IF NOT EXISTS `markmaps`
     id int primary key auto_increment,
     name varchar(255) not null,
     script text not null,
-    user_id char(36) not null,
+    user char(36) not null,
     public decimal(1,0) not null,
     stars int,
-    foreign key (user_id) references users(id),
+    created_at TIMESTAMP DEFAULT(CURRENT_TIMESTAMP),
+    author varchar(255) not null,
+    foreign key (user) references users(id),
     check (public >= 0 AND public <= 1)
 );
 
@@ -31,11 +33,20 @@ CREATE TRIGGER `check_duplicate_markmaps` BEFORE INSERT ON `markmaps` FOR EACH R
     SELECT COUNT(*)
     INTO markmaps_count
     FROM markmaps
-    WHERE name = NEW.name AND user_id = NEW.user_id;
+    WHERE name = NEW.name AND user = NEW.user;
     IF markmaps_count > 0 THEN
     	SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'The user already has a markmap with this name.';
        END IF;
+END
+$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER `update_author_column` AFTER UPDATE ON 'users' FOR EACH ROW BEGIN
+    IF NEW.username IS NOT NULL THEN
+        UPDATE markmaps SET author = NEW.username WHERE user = NEW.id;
+    END IF;
 END
 $$
 DELIMITER ;
