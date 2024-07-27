@@ -10,9 +10,11 @@ import {
   NotFoundException,
   HttpException,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO, UpdateUserDTO } from 'src/dto/users.dto';
+import { isBase64 } from 'class-validator';
 
 @Controller('user')
 export class UserController {
@@ -29,6 +31,9 @@ export class UserController {
 
   @Post()
   async createUser(@Body() user: UserDTO) {
+    if (user.img !== undefined && isBase64(user.img) === false) {
+      throw new BadRequestException('Image must be a base64');
+    }
     try {
       return await this.userService.createUser(user);
     } catch (error) {
@@ -48,8 +53,17 @@ export class UserController {
   }
 
   @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() user: UpdateUserDTO) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() user: UpdateUserDTO & { id?: string },
+  ) {
     try {
+      if (user.username) {
+        user.id = id;
+      }
+      if (user.img !== undefined && isBase64(user.img) === false) {
+        throw new BadRequestException('Image must be a base64');
+      }
       const updated = await this.userService.updateUser(user, id);
       if (!updated) {
         throw new NotFoundException('The user does not exist');
