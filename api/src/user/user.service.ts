@@ -38,6 +38,9 @@ export class UserService {
     if (!(await this.usersRepository.findOne({ where: { id: id } }))) {
       return null;
     }
+    if (user.password) {
+      user.password = await hash(user.password, 8);
+    }
     return await this.usersRepository.update(id, user);
   }
 
