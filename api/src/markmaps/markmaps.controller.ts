@@ -9,9 +9,13 @@ import {
   Post,
   Put,
   Query,
+  Request,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { MarkmapsService } from './markmaps.service';
 import { MarkmapsDTO, UpdateMarkmapsDTO } from 'src/dto/markmaps.dto';
+import { AuthGuard, PayloadInterface } from 'src/auth/auth.guard';
 
 @Controller('markmaps')
 export class MarkmapsController {
@@ -55,9 +59,12 @@ export class MarkmapsController {
     return markmaps;
   }
 
-  @Get(':id')
-  async getUserMarkmaps(@Param('id') id: string) {
-    const markmap = await this.markmapsService.getAllMarkmapOfUser(id);
+  @UseGuards(AuthGuard)
+  @Get()
+  async getUserMarkmaps(@Request() req: PayloadInterface) {
+    const markmap = await this.markmapsService.getAllMarkmapOfUser(
+      req.user.sub,
+    );
     if (markmap.length === 0) {
       throw new NotFoundException(
         'The user does not exist or does not have markmaps yet.',
@@ -82,21 +89,41 @@ export class MarkmapsController {
     return markmap;
   }
 
-  @Put(':id')
+  @UseGuards(AuthGuard)
+  @Put('id')
   async updateMarkmap(
     @Param('id') id: number,
     @Body() markmap: UpdateMarkmapsDTO,
+    @Request() req: PayloadInterface,
   ) {
-    const update = await this.markmapsService.updateMarkmap(id, markmap);
-    if (!update) {
+    const update = await this.markmapsService.updateMarkmap(
+      id,
+      markmap,
+      req.user.sub,
+    );
+    if (update === null) {
       throw new NotFoundException('The markmap with this id does not exist');
     }
+
+    if (update === false) {
+      throw new UnauthorizedException(
+        'The bearer of the request is not equal to the user id of the markmap.',
+      );
+    }
+
     return update;
   }
 
+  @UseGuards()
   @Delete(':id')
-  async deleteMarkmap(@Param('id') id: number) {
-    const deleteMarkmap = await this.markmapsService.deleteMarkmap(id);
+  async deleteMarkmap(
+    @Param('id') id: number,
+    @Request() req: PayloadInterface,
+  ) {
+    const deleteMarkmap = await this.markmapsService.deleteMarkmap(
+      id,
+      req.user.sub,
+    );
     if (!deleteMarkmap) {
       throw new NotFoundException('The markmap with this id does not exist');
     }

@@ -62,7 +62,7 @@ export class MarkmapsService {
     return await this.markmapsRepository.find({ where });
   }
 
-  async getAllMarkmapOfUser(id: string /** token: string */) {
+  async getAllMarkmapOfUser(id: string) {
     return await this.markmapsRepository.find({
       where: { user: { id } },
       order: { created_at: 'DESC' },
@@ -72,26 +72,40 @@ export class MarkmapsService {
     });
   }
 
-  async getOneMarkmap(id: number /** token: string */) {
+  async getOneMarkmap(id: number) {
     return await this.markmapsRepository.findOne({ where: { id } });
   }
 
   async updateMarkmap(
     id: number,
     markmap: UpdateMarkmapsDTO,
-    /** token: string */
-  ): Promise<UpdateResult> | null {
-    if (!(await this.markmapsRepository.findOne({ where: { id: id } }))) {
+    token: string,
+  ): Promise<false | null | UpdateResult> {
+    const toUpdateMarkmap = await this.markmapsRepository.findOne({
+      where: { id: id },
+    });
+    if (!toUpdateMarkmap) {
       return null;
+    }
+    if (toUpdateMarkmap.user.id !== token) {
+      return false;
     }
     return await this.markmapsRepository.update(id, markmap);
   }
 
   async deleteMarkmap(
-    id: number /** token: string */,
-  ): Promise<DeleteResult> | null {
-    if (!(await this.markmapsRepository.findOne({ where: { id: id } }))) {
+    id: number,
+    token: string,
+  ): Promise<false | null | DeleteResult> {
+    const toDeleteMarkmap = await this.markmapsRepository.findOne({
+      where: { id: id },
+    });
+    if (!toDeleteMarkmap) {
       return null;
+    }
+
+    if (toDeleteMarkmap.user.id !== token) {
+      return false;
     }
     return await this.markmapsRepository.delete(id);
   }

@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
   Delete,
   Put,
@@ -11,18 +10,22 @@ import {
   HttpException,
   HttpStatus,
   BadRequestException,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO, UpdateUserDTO } from 'src/dto/users.dto';
 import { isBase64 } from 'class-validator';
+import { AuthGuard, PayloadInterface } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get(':id')
-  async getUser(@Param('id') id: string) {
-    const user = await this.userService.findUserById(id);
+  @UseGuards(AuthGuard)
+  @Get()
+  async getUser(@Request() req: PayloadInterface) {
+    const user = await this.userService.findUserById(req.user.sub);
     if (!user) {
       throw new NotFoundException('The user does not exist');
     }
@@ -43,28 +46,30 @@ export class UserController {
     }
   }
 
-  @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
-    const remove = await this.userService.deleteUser(id);
+  @UseGuards(AuthGuard)
+  @Delete()
+  async deleteUser(@Request() req: PayloadInterface) {
+    const remove = await this.userService.deleteUser(req.user.sub);
     if (!remove) {
       throw new NotFoundException('The user does not exist');
     }
     throw new HttpException('The user has been deleted', HttpStatus.OK);
   }
 
-  @Put(':id')
+  @UseGuards(AuthGuard)
+  @Put()
   async updateUser(
-    @Param('id') id: string,
+    @Request() req: PayloadInterface,
     @Body() user: UpdateUserDTO & { id?: string },
   ) {
     try {
       if (user.username) {
-        user.id = id;
+        user.id = req.user.sub;
       }
       if (user.img !== undefined && isBase64(user.img) === false) {
         throw new BadRequestException('Image must be a base64');
       }
-      const updated = await this.userService.updateUser(user, id);
+      const updated = await this.userService.updateUser(user, req.user.sub);
       if (!updated) {
         throw new NotFoundException('The user does not exist');
       }
