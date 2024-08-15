@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import { Markmaps } from './entities/markmaps.entity';
 import { MarkmapsModule } from './markmaps/markmaps.module';
 import { UserSubscriber } from './subscribers/user.subscriber';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserSubscriber } from './subscribers/user.subscriber';
     }),
     UserModule,
     MarkmapsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
