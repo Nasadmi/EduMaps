@@ -16,4 +16,7 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   img: string | null;
+
+  @Column({ type: 'varchar', nullable: false, default: '[]' })
+  markmapsWithStars: number[];
 }
