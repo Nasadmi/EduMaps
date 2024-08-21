@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotFoundException,
   Param,
   Post,
@@ -87,6 +88,17 @@ export class MarkmapsController {
     }
 
     return markmap;
+  }
+
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  @Put('addStar/:id')
+  async addStar(@Param('id') id: number, @Request() req: PayloadInterface) {
+    const update = await this.markmapsService.addStar(id, req.user.sub);
+
+    if (!update) {
+      throw new NotFoundException('This markmaps does not exists');
+    }
   }
 
   @UseGuards(AuthGuard)
