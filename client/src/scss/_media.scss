@@ -1,0 +1,43 @@
+$screens: (
+  smartphones: (
+    landscape: 736px,
+    portrait: 414px,
+  ),
+
+  tablets: (
+    landscape: 1024px,
+    portrait: 768px,
+  ),
+
+  desktop: 1050px,
+);
+
+@mixin medias($breakpoint: string, $orientation: string) {
+  $desktop: map-get(
+    $map: $screens,
+    $key: desktop,
+  );
+  $smartphones: map-get(
+    $map: $screens,
+    $key: smartphones,
+  );
+  $tablets: map-get(
+    $map: $screens,
+    $key: tablets,
+  );
+  @if ($breakpoint == desktop) {
+    @media only screen and (min-device-width: $desktop) {
+      @content;
+    }
+  } @else {
+    @if ($breakpoint == smartphone) {
+      @media only screen and (max-device-width: map-get($map: $smartphones, $key: $orientation)) and (orientation: $orientation) {
+        @content;
+      }
+    } @else if ($breakpoint == tablet) {
+      @media only screen and (min-device-width: map-get($map: $tablets, $key: $orientation)) and (orientation: $orientation) {
+        @content;
+      }
+    }
+  }
+}

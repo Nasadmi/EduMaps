@@ -1,0 +1,64 @@
+$fonts: (
+  "bold": (
+    "wheight": 700,
+    "style": normal,
+  ),
+
+  "bold-italic": (
+    "wheight": 700,
+    "style": italic,
+  ),
+
+  "italic": (
+    "wheight": 400,
+    "style": italic,
+  ),
+
+  "light": (
+    "wheight": 300,
+    "style": normal,
+  ),
+
+  "light-italic": (
+    "wheight": 300,
+    "style": italic,
+  ),
+
+  "medium": (
+    "wheight": 500,
+    "style": normal,
+  ),
+
+  "medium-italic": (
+    "wheight": 500,
+    "style": italic,
+  ),
+
+  "regular": (
+    "wheight": 400,
+    "style": normal,
+  ),
+);
+
+@each $font, $details in $fonts {
+  $wheight: map-get(
+    $map: $details,
+    $key: "wheight",
+  );
+  $style: map-get(
+    $map: $details,
+    $key: "style",
+  );
+
+  .font-#{$font} {
+    font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+      "Helvetica Neue", sans-serif;
+    font-weight: $wheight;
+    font-style: $style;
+  }
+}
+
+.font-size {
+  font-size: attr(data-font-size) 2px;
+}
