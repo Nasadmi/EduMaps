@@ -1,0 +1,8 @@
+@if (error === null) {
+<div>
+  @for (markmaps of allMarkmaps; track $index) {
+  <app-markmap-home [markmaps]="markmaps"></app-markmap-home> }
+</div>
+} @else {
+<h2 class="font-bold color-white bg-grey">{{ error }}</h2>
+}
