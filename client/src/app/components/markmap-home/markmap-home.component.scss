@@ -1,0 +1,111 @@
+@import "../../../scss/media";
+
+a {
+  margin: 0 20px;
+  text-align: center;
+  z-index: 3;
+  background-color: var(--grey);
+  position: relative;
+  @include medias(smartphone, portrait) {
+    margin: 50px 0;
+  }
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--green);
+  width: 50px;
+  transform: translateX(-20px);
+  height: 100%;
+  z-index: -1;
+  transition: all 500ms ease;
+}
+
+a:hover::after {
+  width: 400px;
+}
+
+ng-icon {
+  color: #e6d863;
+  margin-right: 5px;
+  margin-top: 2px;
+}
+
+img {
+  width: 16px;
+  height: 16px;
+}
+
+h3.date {
+  margin-top: 4px;
+}
+
+h3.star {
+  display: flex;
+  justify-content: center;
+}
+
+button.star {
+  position: absolute;
+  background-color: var(--black);
+  font-size: 40px;
+  bottom: 0px;
+  transform: translateY(10px);
+  left: 88%;
+  border-radius: 50%;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  outline: none;
+  border: none;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+  @include medias(smartphone, portrait) {
+    left: 80%;
+    bottom: 20px;
+  }
+  @include medias(smartphone, landscape) {
+    left: 80%;
+    bottom: 20px;
+  }
+}
+
+@keyframes shakeAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  95% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+button.star:hover ng-icon {
+  animation-duration: 700ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-name: shakeAnimation;
+}
+
+button.star > ng-icon {
+  margin-left: 3px;
+}

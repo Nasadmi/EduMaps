@@ -1,0 +1,13 @@
+<a href="/markmap/{{ markmaps.id }}" class="transition-500">
+  <h1 class="color-white font-bold">{{ markmaps.name }}</h1>
+  <h2 class="color-white font-bold-italic">by {{ markmaps.author }}</h2>
+  <h3 class="color-white font-italic date">
+    {{ markmaps.created_at.split("T")[0] }}
+  </h3>
+  <h3 class="color-white font-regular star">
+    <ng-icon name="ionStar"></ng-icon>{{ markmaps.stars }}
+  </h3>
+</a>
+<button class="star">
+  <ng-icon name="ionStar"></ng-icon>
+</button>
