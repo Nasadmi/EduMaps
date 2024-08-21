@@ -23,11 +23,6 @@ export class MarkmapsDTO {
   @IsUUID()
   user: Pick<User, 'id'>;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  author: string;
-
   stars?: number;
 
   @IsNumber({ allowNaN: false, allowInfinity: false, maxDecimalPlaces: 0 })
