@@ -36,7 +36,42 @@ export class MarkmapsService {
       order: { stars: 'DESC' },
       where,
       take: 20,
+      select: {
+        name: true,
+        author: true,
+        created_at: true,
+        stars: true,
+        id: true,
+      },
     });
+  }
+
+  async addStar(id: number, fromUser: string) {
+    const markmap = await this.markmapsRepository.findOne({
+      where: { id },
+    });
+
+    if (markmap === null) {
+      return false;
+    }
+
+    try {
+      this.markmapsRepository.update(id, { stars: markmap.stars++ });
+      const userStars = JSON.parse(
+        await this.markmapsRepository.query(
+          'SELECT markmapsWithStars FROM user WHERE id = ?'[fromUser],
+        ),
+      ) as number[];
+
+      userStars.push(id);
+
+      await this.markmapsRepository.query(
+        'UPDATE user SET markmapsWithStars = ? WHERE id = ?',
+        [userStars, fromUser],
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getMarkmapByAuthorAndName(
