@@ -9,5 +9,6 @@ import { MarkmapsSubscriber } from 'src/subscribers/markmaps.subscriber';
   imports: [TypeOrmModule.forFeature([Markmaps])],
   providers: [MarkmapsService, MarkmapsSubscriber],
   controllers: [MarkmapsController],
+  exports: [MarkmapsService],
 })
 export class MarkmapsModule {}
