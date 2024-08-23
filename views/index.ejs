@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('includes/head', { styles: [ 'index', 'markmap-card' ] }) %>
+<body>
+  <div class="container">
+    <div class="markmaps-card-list">
+      <% allMarkmaps.forEach(function(markmap) { %>
+        <%- include('includes/markmap-card', { markmap }) %>
+      <% }); %>
+    </div>
+  </div>
+</body>
+</html>

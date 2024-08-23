@@ -1,0 +1,6 @@
+.markmaps-card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-rows: min-content;
+  gap: 10px;
+}
