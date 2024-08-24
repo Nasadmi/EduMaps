@@ -1,12 +1,12 @@
-div.markmap-card {
-  margin: 0 auto;
-  padding: 2em;
+a.markmap-card {
+  margin: 10px auto 0;
+  padding: 1.5em;
   width: 300px;
   background: #1c1f2b;
   text-align: center;
   border-radius: 10px;
   position: relative;
-  z-index: 1;
+  transition: all 200ms ease;
 }
 
 @property --angle {
@@ -15,32 +15,50 @@ div.markmap-card {
   inherits: false;
 }
 
-div.markmap-card::after,
-div.markmap-card::before {
+@property --color {
+  syntax: '<color>';
+  initial-value: #51557e;
+  inherits: false;
+}
+
+a.markmap-card::after,
+a.markmap-card::before {
+  --color: var(--jacarta);
   content: '';
   position: absolute;
   height: 100%;
   width: 100%;
   background-image: conic-gradient(
     from var(--angle),
-    #ff4545,
-    #00ff99,
-    #006aff,
-    #ff0095,
-    #ff4545
+    transparent 60%,
+    var(--color)
   );
   top: 50%;
   left: 50%;
   translate: -50% -50%;
-  z-index: 0;
-  padding: 10px;
+  z-index: -1;
+  padding: 3px;
   border-radius: 10px;
-  animation: 3s spin linear infinite;
+  animation: 6s spin linear infinite;
+  transition: --color 0.5s ease;
 }
 
-div.markmap-card::before {
+a.markmap-card::before {
   filter: blur(1.5rem);
   opacity: 0.5;
+}
+
+.markmap-text {
+  transition: color 500ms ease;
+}
+
+a.markmap-card:hover .markmap-text {
+  color: var(--pastel-pink);
+}
+
+a.markmap-card:hover::before,
+a.markmap-card:hover::after {
+  --color: var(--pastel-pink);
 }
 
 @keyframes spin {
@@ -52,6 +70,24 @@ div.markmap-card::before {
   }
 }
 
-div.markmap-card h1.markmap-name {
+a.markmap-card h1 {
   color: var(--sugar-plum);
+}
+
+a.markmap-card h2 {
+  color: var(--jacarta);
+}
+
+a.markmap-card h4.date {
+  color: var(--jacarta);
+  margin-top: 3px;
+}
+
+a.markmap-card h4.star {
+  color: var(--pastel-pink);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 3px;
 }
