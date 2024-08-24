@@ -1,5 +1,11 @@
-<div class="markmap-card">
-  <a href="/markmap/<%= markmap.id %>">
-    <h1 class="playfair-bold markmap-name"><%= markmap.name %></h1>
-  </a>
-</div>
+<a href="/markmap/<%= markmap.id %>" class="markmap-card">
+  <h1 class="playfair-bold markmap-text"><%= markmap.name %></h1>
+  <h2 class="playfair-medium markmap-text">by <%= markmap.author %></h2>
+  <h4 class="playfair-regular markmap-text date">
+    <%= markmap.created_at.toDateString() %>
+  </h4>
+  <h4 class="playfair-regular star">
+    <ion-icon name="star"></ion-icon>
+    <%= markmap.stars %>
+  </h4>
+</a>
